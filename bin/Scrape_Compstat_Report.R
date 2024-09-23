@@ -1,5 +1,6 @@
 library(pdftools)
 library(stringr)
+library(lubridate)
 
 download.file("https://home.nyc.gov/assets/nypd/downloads/pdf/crime_statistics/cs-en-us-city.pdf",
               "dat/compstat.pdf", mode = 'wb')
@@ -11,7 +12,7 @@ compstat_dates <- unlist(str_extract_all(compstat_raw, "\\d{1,2}/\\d{1,2}/\\d{4}
 
 #extracting the rows for the crimes we're interested in
 
-crimes <- compstat_rows[str_detect(compstat_rows, "Murder|Rape|Robbery|Fel. Assault|Burglary|Gr. Larceny|G.L.A.|Petit Larceny|Retail Theft|Misd. Assault|Shooting Inc.")][c(1:10, 12)]
+crimes <- compstat_rows[str_detect(compstat_rows, "Murder|Rape|Robbery|Fel. Assault|Burglary|Gr. Larceny|G.L.A.|Petit Larceny|Misd. Assault")][1:9]
 
 #splitting on white space unless the white space is preceded by a period
 #which avoids splitting "Fel. Assault" and "Gr. Larceny" on white space
@@ -27,11 +28,11 @@ names(crimes) <- c("Offense", "n")
 crimes$n <- gsub(",", "", crimes$n)
 
 date <- unlist(strsplit(compstat_dates[1], "/"))
+date <- as.Date(paste(date[3], date[1], date[2], sep = "-"), format = "%Y-%m-%d")
 
-crimes$Month <- date[1]
-crimes$Day <- date[2]
-crimes$Year <- date[3]
+crimes$Year <- year(date)
+crimes$Week <- week(date)
 
-write.csv(crimes, paste("dat/individual reports/compstat-", paste(date, collapse = "-"), ".csv", sep = ""))
+write.csv(crimes, paste("dat/individual reports/compstat-", paste(date, collapse = "-"), ".csv", sep = ""), row.names = F)
 
 file.remove("dat/compstat.pdf")
