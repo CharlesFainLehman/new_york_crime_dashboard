@@ -33,6 +33,6 @@ date <- as.Date(paste(date[3], date[1], date[2], sep = "-"), format = "%Y-%m-%d"
 crimes$Year <- year(date)
 crimes$Week <- week(date)
 
-write.csv(crimes, paste("dat/individual reports/compstat-", paste(date, collapse = "-"), ".csv", sep = ""), row.names = F)
+write.csv(crimes, paste("dat/individual reports/compstat-", year(date), "-", week(date), ".csv", sep = ""), row.names = F)
 
 file.remove("dat/compstat.pdf")
