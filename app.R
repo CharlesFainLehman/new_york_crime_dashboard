@@ -4,7 +4,7 @@ library(dplyr)
 library(bslib)
 library(tidyr)
 library(zoo)
-library(ggplot2)
+library(plotly)
 theme_set(theme_MI_clear())
 
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts.csv") %>%
@@ -51,16 +51,16 @@ server <- function(input, output) {
            Year <= input$years[2])
   })
   
-  output$week <- renderPlot({
+  output$week <- renderPlotly({
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
-      ggplot(aes(x=Year, y=n)) +
-      geom_col()
+      plot_ly(x= ~Year, y= ~n) %>%
+      add_bars()
   })
   
-  output$ra <- renderPlot({
-    ggplot(visualized_data(), aes(x=Year + (Week - 1)/52, y=rolln)) +
-      geom_line()
+  output$ra <- renderPlotly({
+    plot_ly(visualized_data(), x = ~Year + (~Week - 1)/52, y= ~rolln) %>%
+      add_lines()
   })
   
 }
