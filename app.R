@@ -5,7 +5,6 @@ library(bslib)
 library(tidyr)
 library(zoo)
 library(plotly)
-theme_set(theme_MI_clear())
 
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%
   mutate(Date = as.Date(Date))
@@ -55,14 +54,14 @@ server <- function(input, output) {
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
       plot_ly(x= ~Year, y= ~n) %>%
-      add_bars()
+      add_bars(hovertemplate = "%{y}<extra></extra>")
   })
   
   output$ytd <- renderPlotly({
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
       plot_ly(x =~Year, y = ~ytd) %>%
-      add_bars()
+      add_bars(hovertemplate = "%{y}<extra></extra>")
   })
   
   output$mtm <- renderPlotly({
