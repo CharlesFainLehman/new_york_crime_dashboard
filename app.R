@@ -2,7 +2,6 @@
 library(shiny)
 library(dplyr)
 library(bslib)
-library(zoo)
 library(plotly)
 
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%

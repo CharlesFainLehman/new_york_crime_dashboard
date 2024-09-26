@@ -24,7 +24,7 @@ jobs:
       shell: Rscript {0}
     - name: Run script
       run: Rscript bin/Data_Production_Process.R
-    - name: adding new file
+    - name: adding new file #this will fail if there's no changes, which is fine, I can clean it up later
       run: |
         git config --local user.name  ${{ github.actor }}
         git add -A
