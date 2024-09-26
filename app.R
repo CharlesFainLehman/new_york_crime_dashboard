@@ -25,8 +25,8 @@ ui <- page_navbar(
   title = "Crime in New York",
   card(
     navset_card_tab(
-      nav_panel("This Week", plotOutput("week")),
-      nav_panel("Rolling Average", plotOutput("ra"))
+      nav_panel("This Week", plotlyOutput("week")),
+      nav_panel("Rolling Average", plotlyOutput("ra"))
     )
   ),
   sidebar = card(
@@ -59,7 +59,9 @@ server <- function(input, output) {
   })
   
   output$ra <- renderPlotly({
-    plot_ly(visualized_data(), x = ~Year + (~Week - 1)/52, y= ~rolln) %>%
+    visualized_data() %>% 
+      mutate(Date = as.Date(paste(Year, Week, "1", sep = "-"), format = "%Y-%U-%u")) %>%
+    plot_ly(x = ~Date, y = ~rolln) %>%
       add_lines()
   })
   
