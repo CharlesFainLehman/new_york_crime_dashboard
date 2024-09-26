@@ -16,6 +16,8 @@ jobs:
         r-version: '4.3.2'
     - name: Install Curl
       run: sudo apt-get install libcurl4-openssl-dev
+    - name: Install poppler
+      run: sudo apt-get install libpoppler-cpp-dev
     - name: Install R libraries
       run: |
         install.packages(c("pdftools", "stringr", "lubridate", "dplyr", "zoo"))

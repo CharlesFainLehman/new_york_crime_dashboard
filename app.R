@@ -2,7 +2,6 @@
 library(shiny)
 library(dplyr)
 library(bslib)
-library(tidyr)
 library(zoo)
 library(plotly)
 
@@ -76,7 +75,7 @@ server <- function(input, output) {
   
   output$ra <- renderPlotly({
     visualized_data() %>% 
-      drop_na() %>%
+      filter(!is.na(rollingavg)) %>%
       plot_ly(x = ~Date, y = ~rollingavg) %>%
       add_lines()
   })
