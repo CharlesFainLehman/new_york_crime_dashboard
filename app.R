@@ -1,4 +1,3 @@
-# Load the shiny package
 library(shiny)
 library(dplyr)
 library(bslib)

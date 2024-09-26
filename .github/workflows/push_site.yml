@@ -16,7 +16,7 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: Install R libraries
       run: |
-        install.packages(c("rsconnect", "shiny", "dplyr", "ggplot2"))
+        install.packages(c("rsconnect", "shiny", "dplyr", "bslib", "plotly"))
       shell: Rscript {0}
     - name: Push to site
       run: Rscript bin/upload_to_site.R "$SECRET"
