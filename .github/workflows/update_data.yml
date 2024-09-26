@@ -16,7 +16,7 @@ jobs:
         r-version: '4.3.2'
     - name: Install R libraries
       run: |
-        install.packages(c("rsconnect", "shiny", "dplyr", "ggplot2"))
+        install.packages(c("pdftools", "stringr", "lubridate", "dplyr", "zoo"))
       shell: Rscript {0}
     - name: Run script
       run: Rscript bin/Data_Production_Process.R
