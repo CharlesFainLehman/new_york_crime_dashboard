@@ -5,11 +5,11 @@ library(zoo)
 wcc <- read.csv("dat/weekly_crime_counts.csv")
 
 wcc %>% 
-  mutate(Date = as.Date(paste(Year, Week, "1", sep = "-"), format = "%Y-%U-%u"),
-         Month = month(Date)) %>%
+  mutate(Date = as.Date(paste(Year, Week, "1", sep = "-"), format = "%Y-%W-%u"),
+         Month = month(Date)) %>% 
   group_by(Offense) %>%
   arrange(Year, Week) %>%
-  mutate(rollingavg = rollmean(n, 52, align = 'right', fill = NA)) %>%
+  mutate(rollingavg = rollsum(n, 52, align = 'right', fill = NA)) %>%
   ungroup() %>%
   group_by(Offense, Year) %>%
   arrange(Week) %>%

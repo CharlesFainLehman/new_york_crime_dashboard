@@ -13,7 +13,7 @@ for(file in compstat_reports) {
   #if the combination of year and week is already in the data set
   if(nrow(filter(weekly_summary, Year == year, Week == week)) > 0) {
     print("file already appended")
-    break
+    next
   } else
   {
     weekly_summary <- bind_rows(weekly_summary, read.csv(file))

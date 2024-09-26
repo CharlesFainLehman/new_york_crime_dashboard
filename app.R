@@ -14,15 +14,19 @@ most_recent_year <- weekly_crime_counts %>%
   arrange(Year, Week) %>%
   slice_tail(n = 1) %>% pull(Year)
 
+most_recent_date = weekly_crime_counts %>%
+  arrange(Date) %>%
+  slice_tail(n = 1) %>% pull(Date)
+
 # Define the UI
 ui <- page_navbar(
-  title = "Crime in New York",
+  title = paste("Crime in New York (Updated ", most_recent_date, ")", sep = ""),
   card(
     navset_card_tab(
       nav_panel("This Week", plotlyOutput("week")),
       nav_panel("Year to Date", plotlyOutput("ytd")),
       nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
-      nav_panel("Rolling Average", plotlyOutput("ra"))
+      nav_panel("12-Month Rolling Sum", plotlyOutput("rs"))
     )
   ),
   sidebar = card(
@@ -71,7 +75,7 @@ server <- function(input, output) {
   })
   
   
-  output$ra <- renderPlotly({
+  output$rs <- renderPlotly({
     visualized_data() %>% 
       filter(!is.na(rollingavg)) %>%
       plot_ly(x = ~Date, y = ~rollingavg) %>%

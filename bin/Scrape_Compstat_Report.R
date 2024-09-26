@@ -2,8 +2,8 @@ library(pdftools)
 library(stringr)
 library(lubridate)
 
-download.file("https://home.nyc.gov/assets/nypd/downloads/pdf/crime_statistics/cs-en-us-city.pdf",
-              "dat/compstat.pdf", mode = 'wb')
+download.file("https://www.nyc.gov/assets/nypd/downloads/pdf/crime_statistics/cs-en-us-city.pdf",
+              "dat/compstat.pdf", mode = 'w+')
 
 compstat_raw <- pdf_text("dat/compstat.pdf")
 compstat_rows <- unlist(strsplit(compstat_raw, "\n"))
