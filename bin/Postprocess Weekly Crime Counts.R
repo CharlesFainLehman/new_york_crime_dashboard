@@ -9,7 +9,7 @@ wcc %>%
          Month = month(Date)) %>%
   group_by(Offense) %>%
   arrange(Year, Week) %>%
-  mutate(rollingavg = rollsum(n, 52, align = 'right', fill = NA)) %>%
+  mutate(rollingavg = rollmean(n, 52, align = 'right', fill = NA)) %>%
   ungroup() %>%
   group_by(Offense, Year) %>%
   arrange(Week) %>%
