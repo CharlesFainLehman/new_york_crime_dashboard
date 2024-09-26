@@ -1,6 +1,5 @@
 name: update_site_on_push
 on: [push]
-on: workflow_dispatch
 env: 
     SECRET: ${{ secrets.SHINYAPPS_SECRET_TOKEN }}
 
