@@ -7,10 +7,8 @@ library(zoo)
 library(plotly)
 theme_set(theme_MI_clear())
 
-weekly_crime_counts <- read.csv("dat/weekly_crime_counts.csv") %>%
-  group_by(Offense) %>%
-  arrange(Year, Week) %>%
-  mutate(rolln = rollsum(n, 52, align = 'right', fill = NA))
+weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%
+  mutate(Date = as.Date(Date))
 
 most_recent_week <- weekly_crime_counts %>%
   arrange(Year, Week) %>%
@@ -26,6 +24,8 @@ ui <- page_navbar(
   card(
     navset_card_tab(
       nav_panel("This Week", plotlyOutput("week")),
+      nav_panel("Year to Date", plotlyOutput("ytd")),
+      nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
       nav_panel("Rolling Average", plotlyOutput("ra"))
     )
   ),
@@ -37,7 +37,7 @@ ui <- page_navbar(
                 label = "",
                 min = 2006,
                 max = 2024,
-                value = c(2006, 2024))
+                value = c(2018, 2024), sep = "")
   )
 )
 
@@ -58,10 +58,27 @@ server <- function(input, output) {
       add_bars()
   })
   
+  output$ytd <- renderPlotly({
+    visualized_data() %>%
+      filter(Week == most_recent_week) %>%
+      plot_ly(x =~Year, y = ~ytd) %>%
+      add_bars()
+  })
+  
+  output$mtm <- renderPlotly({
+    visualized_data() %>%
+      group_by(Year, Month) %>%
+      slice_tail(n = 1) %>%
+      ungroup() %>%
+      plot_ly(x = ~Date, y = ~monthly_n) %>%
+      add_lines()
+  })
+  
+  
   output$ra <- renderPlotly({
     visualized_data() %>% 
-      mutate(Date = as.Date(paste(Year, Week, "1", sep = "-"), format = "%Y-%U-%u")) %>%
-    plot_ly(x = ~Date, y = ~rolln) %>%
+      drop_na() %>%
+      plot_ly(x = ~Date, y = ~rollingavg) %>%
       add_lines()
   })
   

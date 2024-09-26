@@ -3,7 +3,7 @@ library(dplyr)
 
 weekly_summary <- read.csv("dat/weekly_crime_counts.csv")
 
-compstat_reports <- list.files("dat/individual reports", full.names = T)
+compstat_reports <- list.files("dat/individual reports/csv", full.names = T)
 
 for(file in compstat_reports) {
   print(file)
