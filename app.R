@@ -3,6 +3,10 @@ library(dplyr)
 library(bslib)
 library(plotly)
 
+shinyOptions(bslib = T)
+
+MI_theme = bs_theme(bg = '#e8ecfc', fg = 'black')
+
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%
   mutate(Date = as.Date(Date))
 
@@ -21,6 +25,7 @@ most_recent_date = weekly_crime_counts %>%
 # Define the UI
 ui <- page_navbar(
   title = paste("Crime in New York (Updated ", most_recent_date, ")", sep = ""),
+  theme = MI_theme,
   card(
     navset_card_tab(
       nav_panel("This Week", plotlyOutput("week")),
@@ -29,7 +34,7 @@ ui <- page_navbar(
       nav_panel("12-Month Rolling Sum", plotlyOutput("rs"))
     )
   ),
-  sidebar = card(
+  sidebar = sidebar(
     selectInput(inputId = "offense", 
                 label = "Offense:", 
                 unique(weekly_crime_counts$Offense)),
@@ -55,14 +60,18 @@ server <- function(input, output) {
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
       plot_ly(x= ~Year, y= ~n) %>%
-      add_bars(hovertemplate = "%{y}<extra></extra>")
+      add_bars(hovertemplate = "%{y}<extra></extra>") %>%
+      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
+             paper_bgcolor = 'rgba(0, 0, 0, 0)')
   })
   
   output$ytd <- renderPlotly({
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
       plot_ly(x =~Year, y = ~ytd) %>%
-      add_bars(hovertemplate = "%{y}<extra></extra>")
+      add_bars(hovertemplate = "%{y}<extra></extra>") %>%
+      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
+             paper_bgcolor = 'rgba(0, 0, 0, 0)')
   })
   
   output$mtm <- renderPlotly({
@@ -71,7 +80,9 @@ server <- function(input, output) {
       slice_tail(n = 1) %>%
       ungroup() %>%
       plot_ly(x = ~Date, y = ~monthly_n) %>%
-      add_lines()
+      add_lines() %>%
+      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
+             paper_bgcolor = 'rgba(0, 0, 0, 0)')
   })
   
   
@@ -79,7 +90,9 @@ server <- function(input, output) {
     visualized_data() %>% 
       filter(!is.na(rollingavg)) %>%
       plot_ly(x = ~Date, y = ~rollingavg) %>%
-      add_lines()
+      add_lines() %>%
+      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
+             paper_bgcolor = 'rgba(0, 0, 0, 0)')
   })
   
 }
