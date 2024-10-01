@@ -1,6 +1,8 @@
 name: update_site_on_push
 on: 
-  [push] 
+  push:
+    branches:
+      - main
   workflow_run:
     workflows: ["update_data"]
     types:
