@@ -11,13 +11,28 @@ MI_style_plotly <- function(plot) {
     layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
            paper_bgcolor = 'rgba(0, 0, 0, 0)',
            xaxis = list(title = ""),
-           yaxis = list(title = "", tickformat = ",")
+           yaxis = list(title = "", tickformat = ","),
+           font = list(family = "Le Monde Livre"),
+           hoverlabel = list(font = list(family = "Le Monde Livre"))
     ) %>% 
     config(displayModeBar = FALSE) %>%
     return()
 }
 
-MI_theme = bs_theme(bg = '#f0f3ff', fg = '#20222e')
+MI_theme = bs_theme(bg = '#f0f3ff', fg = '#20222e', base_font = "Le Monde Livre") %>%
+  bs_add_rules(
+    "
+    .bslib-navbar .nav-link, .bslib-navbar .navbar-brand {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;  /* Adjusts padding for the navbar */
+    }
+    .navbar {
+        margin-bottom: 5px !important;
+        margin-top: 1px !important;
+        /* Reduce space below the navbar */
+    }
+    "
+  )
 
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%
   mutate(Date = as.Date(Date))
@@ -36,8 +51,16 @@ most_recent_date = weekly_crime_counts %>%
 
 # Define the UI
 ui <- page_navbar(
-  title = paste("Crime in New York (Updated ", most_recent_date, ")", sep = ""),
+  
+  title = div(
+    class = "title-block",
+    h3("Crime in New York"),
+    p(paste("(Updated ", most_recent_date, ")", sep = ""), style = "font-size: 14px; margin-bottom: 0px;"),
+    style = "margin-bottom: 1px;"
+    ),
+  
   theme = MI_theme,
+  
   card(
     navset_card_tab(
       nav_panel("This Week", plotlyOutput("week")),
@@ -46,6 +69,7 @@ ui <- page_navbar(
       nav_panel("12-Month Rolling Sum", plotlyOutput("rs"))
     )
   ),
+  
   sidebar = sidebar(
     selectInput(inputId = "offense", 
                 label = tooltip(
@@ -56,7 +80,11 @@ ui <- page_navbar(
                   "Select an offense to view",
                   placement = 'top'
                 ), 
-                unique(weekly_crime_counts$Offense)),
+                choices = list(
+                "Major Crimes" = c("Murder", "Rape", "Robbery", "Fel. Assault", "Burglary", "Gr. Larceny", "G.L.A."),
+                "Minor Crimes" = c("Petit Larceny", "Misd. Assault")
+                )
+                ),
     sliderInput(inputId = "years",
                 label = tooltip(
                   trigger = list(
@@ -68,7 +96,12 @@ ui <- page_navbar(
                 ),
                 min = 2006,
                 max = 2024,
-                value = c(2018, 2024), sep = "")
+                value = c(2018, 2024), sep = ""),
+  )
+  
+  tags$div(
+    tags$img(src = "Master-MI-Black-RGB.svg", style = "position: absolute; bottom: 10px; left: 10px; width: 100px;"),
+    style = "position: relative; height: 100vh;"
   )
 )
 
