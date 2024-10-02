@@ -5,6 +5,8 @@ library(bsicons)
 library(plotly)
 
 shinyOptions(bslib = T)
+#load the bs theme
+source("bin/MI_theme.R")
 
 MI_style_plotly <- function(plot) {
   plot %>%
@@ -18,21 +20,6 @@ MI_style_plotly <- function(plot) {
     config(displayModeBar = FALSE) %>%
     return()
 }
-
-MI_theme = bs_theme(bg = '#f0f3ff', fg = '#20222e', base_font = "Le Monde Livre") %>%
-  bs_add_rules(
-    "
-    .bslib-navbar .nav-link, .bslib-navbar .navbar-brand {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;  /* Adjusts padding for the navbar */
-    }
-    .navbar {
-        margin-bottom: 5px !important;
-        margin-top: 1px !important;
-        /* Reduce space below the navbar */
-    }
-    "
-  )
 
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%
   mutate(Date = as.Date(Date))
@@ -96,7 +83,8 @@ ui <- page_navbar(
                 ),
                 min = 2006,
                 max = 2024,
-                value = c(2018, 2024), sep = ""),
+                value = c(2018, 2024),
+                sep = ""),
   ),
 )
 
