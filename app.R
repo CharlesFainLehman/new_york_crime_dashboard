@@ -1,11 +1,23 @@
 library(shiny)
 library(dplyr)
 library(bslib)
+library(bsicons)
 library(plotly)
 
 shinyOptions(bslib = T)
 
-MI_theme = bs_theme(bg = '#e8ecfc', fg = 'black')
+MI_style_plotly <- function(plot) {
+  plot %>%
+    layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
+           paper_bgcolor = 'rgba(0, 0, 0, 0)',
+           xaxis = list(title = ""),
+           yaxis = list(title = "", tickformat = ",")
+    ) %>% 
+    config(displayModeBar = FALSE) %>%
+    return()
+}
+
+MI_theme = bs_theme(bg = '#f0f3ff', fg = '#20222e')
 
 weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>%
   mutate(Date = as.Date(Date))
@@ -36,10 +48,24 @@ ui <- page_navbar(
   ),
   sidebar = sidebar(
     selectInput(inputId = "offense", 
-                label = "Offense:", 
+                label = tooltip(
+                  trigger = list(
+                    "Offense",
+                    bs_icon("info-circle")
+                  ),
+                  "Select an offense to view",
+                  placement = 'top'
+                ), 
                 unique(weekly_crime_counts$Offense)),
     sliderInput(inputId = "years",
-                label = "",
+                label = tooltip(
+                  trigger = list(
+                    "Years",
+                    bs_icon("info-circle")
+                  ),
+                  "Select a range of years to view",
+                  placement = 'top'
+                ),
                 min = 2006,
                 max = 2024,
                 value = c(2018, 2024), sep = "")
@@ -59,19 +85,17 @@ server <- function(input, output) {
   output$week <- renderPlotly({
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
-      plot_ly(x= ~Year, y= ~n) %>%
+      plot_ly(x= ~Year, y= ~n, marker = list(color = "#2fa8ff")) %>%
       add_bars(hovertemplate = "%{y}<extra></extra>") %>%
-      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
-             paper_bgcolor = 'rgba(0, 0, 0, 0)')
+      MI_style_plotly()
   })
   
   output$ytd <- renderPlotly({
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
-      plot_ly(x =~Year, y = ~ytd) %>%
+      plot_ly(x =~Year, y = ~ytd, marker = list(color = "#2fa8ff")) %>%
       add_bars(hovertemplate = "%{y}<extra></extra>") %>%
-      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
-             paper_bgcolor = 'rgba(0, 0, 0, 0)')
+      MI_style_plotly()
   })
   
   output$mtm <- renderPlotly({
@@ -79,20 +103,18 @@ server <- function(input, output) {
       group_by(Year, Month) %>%
       slice_tail(n = 1) %>%
       ungroup() %>%
-      plot_ly(x = ~Date, y = ~monthly_n) %>%
+      plot_ly(x = ~Date, y = ~monthly_n, line = list(color = "#2fa8ff")) %>%
       add_lines() %>%
-      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
-             paper_bgcolor = 'rgba(0, 0, 0, 0)')
+      MI_style_plotly()
   })
   
   
   output$rs <- renderPlotly({
     visualized_data() %>% 
       filter(!is.na(rollingavg)) %>%
-      plot_ly(x = ~Date, y = ~rollingavg) %>%
+      plot_ly(x = ~Date, y = ~rollingavg, line = list(color = "#2fa8ff")) %>%
       add_lines() %>%
-      layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
-             paper_bgcolor = 'rgba(0, 0, 0, 0)')
+      MI_style_plotly()
   })
   
 }
