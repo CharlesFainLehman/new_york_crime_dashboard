@@ -51,16 +51,16 @@ most_recent_date = weekly_crime_counts %>%
 
 # Define the UI
 ui <- page_navbar(
-  
+
+  theme = MI_theme,
+    
   title = div(
     class = "title-block",
-    h3("Crime in New York"),
+    h3("Crime in New York", style = "margin-bottom: 1px"),
     p(paste("(Updated ", most_recent_date, ")", sep = ""), style = "font-size: 14px; margin-bottom: 0px;"),
-    style = "margin-bottom: 1px;"
+    style = "margin-bottom: 0px;"
     ),
-  
-  theme = MI_theme,
-  
+
   card(
     navset_card_tab(
       nav_panel("This Week", plotlyOutput("week")),
@@ -97,12 +97,7 @@ ui <- page_navbar(
                 min = 2006,
                 max = 2024,
                 value = c(2018, 2024), sep = ""),
-  )
-  
-  tags$div(
-    tags$img(src = "Master-MI-Black-RGB.svg", style = "position: absolute; bottom: 10px; left: 10px; width: 100px;"),
-    style = "position: relative; height: 100vh;"
-  )
+  ),
 )
 
 # Define the server logic
