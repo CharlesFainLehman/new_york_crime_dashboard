@@ -15,7 +15,10 @@ MI_style_plotly <- function(plot) {
            xaxis = list(title = ""),
            yaxis = list(title = "", tickformat = ","),
            font = list(family = "Le Monde Livre"),
-           hoverlabel = list(font = list(family = "Le Monde Livre"))
+           hovermode = "closest",  # Ensure the hovermode is set properly
+           hoverlabel = list(font = list(family = "Le Monde Livre", color = 'black'),
+                             bordercolor = 'rgba(255,255,255,0.75)',
+                             bgcolor = 'rgbargba(255,255,255,0.75)')
     ) %>% 
     config(displayModeBar = FALSE) %>%
     return()
@@ -44,13 +47,12 @@ ui <- page_navbar(
   title = div(
     class = "title-block",
     h3("Crime in New York", style = "margin-bottom: 1px"),
-    p(paste("(Updated ", most_recent_date, ")", sep = ""), style = "font-size: 14px; margin-bottom: 0px;"),
     style = "margin-bottom: 0px;"
     ),
 
   card(
     navset_card_tab(
-      nav_panel("This Week", plotlyOutput("week")),
+      nav_panel(paste("This Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week")),
       nav_panel("Year to Date", plotlyOutput("ytd")),
       nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
       nav_panel("12-Month Rolling Sum", plotlyOutput("rs"))
@@ -68,8 +70,8 @@ ui <- page_navbar(
                   placement = 'top'
                 ), 
                 choices = list(
-                "Major Crimes" = c("Murder", "Rape", "Robbery", "Fel. Assault", "Burglary", "Gr. Larceny", "G.L.A."),
-                "Minor Crimes" = c("Petit Larceny", "Misd. Assault")
+                "Violent Crimes" = c("Murder", "Rape", "Robbery", "Fel. Assault", "Misd. Assault"),
+                "Property Crimes" = c("Burglary", "Gr. Larceny", "Gr. Lar. Auto", "Petit Larceny")
                 )
                 ),
     sliderInput(inputId = "years",
@@ -85,6 +87,9 @@ ui <- page_navbar(
                 max = 2024,
                 value = c(2018, 2024),
                 sep = ""),
+    tags$text("Description: 
+              
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
   ),
 )
 
@@ -93,7 +98,7 @@ server <- function(input, output) {
   
   visualized_data <- reactive({
     filter(weekly_crime_counts, 
-           Offense == input$offense,
+           Offense == ifelse(input$offense == "Gr. Lar. Auto", "G.L.A.", input$offense),
            Year >= input$years[1],
            Year <= input$years[2])
   })
