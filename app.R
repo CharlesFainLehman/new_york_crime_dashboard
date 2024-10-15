@@ -44,20 +44,12 @@ ui <- page_navbar(
 
   theme = MI_theme,
     
-  title = div(
-    class = "title-block",
-    h3("Crime in New York", style = "margin-bottom: 1px"),
-    style = "margin-bottom: 0px;"
-    ),
+  title = "Crime in New York",
 
-  card(
-    navset_card_tab(
       nav_panel(paste("This Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week")),
       nav_panel("Year to Date", plotlyOutput("ytd")),
       nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
-      nav_panel("12-Month Rolling Sum", plotlyOutput("rs"))
-    )
-  ),
+      nav_panel("12-Month Rolling Sum", plotlyOutput("rs")),
   
   sidebar = sidebar(
     selectInput(inputId = "offense", 
