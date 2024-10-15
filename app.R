@@ -41,16 +41,17 @@ most_recent_date = weekly_crime_counts %>%
 
 # Define the UI
 ui <- page_navbar(
-
-  theme = MI_theme,
-    
-  title = "Crime in New York",
-
-      nav_panel(paste("This Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week")),
-      nav_panel("Year to Date", plotlyOutput("ytd")),
-      nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
-      nav_panel("12-Month Rolling Sum", plotlyOutput("rs")),
   
+  theme = MI_theme,
+  
+  title = "Crime in New York",
+  
+  nav_panel(paste("Last Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week")),
+  nav_panel("Year to Date", plotlyOutput("ytd")),
+  nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
+  nav_panel("12-Month Rolling Sum", plotlyOutput("rs")),
+  nav_item(a(href = "https://github.com/CharlesFainLehman/new_york_crime_dashboard/blob/main/dat/weekly_crime_counts_post_processed.csv", "Get the Data", target = "_blank"), ""),
+
   sidebar = sidebar(
     selectInput(inputId = "offense", 
                 label = tooltip(
@@ -62,10 +63,10 @@ ui <- page_navbar(
                   placement = 'top'
                 ), 
                 choices = list(
-                "Violent Crimes" = c("Murder", "Rape", "Robbery", "Fel. Assault", "Misd. Assault"),
-                "Property Crimes" = c("Burglary", "Gr. Larceny", "Gr. Lar. Auto", "Petit Larceny")
+                  "Violent Crimes" = c("Murder", "Rape", "Robbery", "Fel. Assault", "Misd. Assault"),
+                  "Property Crimes" = c("Burglary", "Gr. Larceny", "Gr. Lar. Auto", "Petit Larceny")
                 )
-                ),
+    ),
     sliderInput(inputId = "years",
                 label = tooltip(
                   trigger = list(
@@ -79,10 +80,16 @@ ui <- page_navbar(
                 max = 2024,
                 value = c(2018, 2024),
                 sep = ""),
-    tags$text("Description: 
+    tags$text(p(tags$b("About:")),
               
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
-  ),
+              p("This dashboard lets users visualize crime in New York City between the most recently available week and 2006."),
+              
+              p("Users can select one of nine crimes, and view offense counts last week, year-to-date, and on a rolling basis."),
+              
+              p("This dashboard is a product of the Manhattan Institute for Policy Research.")
+    ),
+    img(src="Master-MI-Black-RGB.png")
+  )
 )
 
 # Define the server logic
