@@ -88,7 +88,7 @@ ui <- page_navbar(
               
               p("This dashboard is a product of the Manhattan Institute for Policy Research.")
     ),
-    img(src="Master-MI-Black-RGB.png")
+    img(src="Master-MI-Black-RGB.png"), width = "10%"
   )
 )
 
