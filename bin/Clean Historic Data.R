@@ -5,7 +5,7 @@
 library(tidyverse)
 library(lubridate)
 
-if(!exists("ytd")) {ytd <- read.csv("dat/NYPD_Complaint_Data_Current__Year_To_Date__20240920.csv")}
+if(!exists("ytd")) {ytd <- read.csv("dat/NYPD_Complaint_Data_Current__Year_To_Date__20241023.csv")}
 
 ytd %>%
   filter(OFNS_DESC %in% c("MURDER & NON-NEGL. MANSLAUGHTER",
@@ -35,9 +35,9 @@ ytd %>%
     OFNS_DESC == "ASSAULT 3 & RELATED OFFENSES" ~ "Misd. Assault"
   )) %>% 
   select(-OFNS_DESC) %>%
-  write.csv('dat/weekly_crime_count_Q1-Q2 2024.csv', row.names = F)
+  write.csv('dat/weekly_crime_count_Q1-Q3 2024.csv', row.names = F)
 
-if(!exists('historic')) {historic <- read.csv("dat/NYPD_Complaint_Data_Historic_20240923.csv")}
+if(!exists('historic')) {historic <- read.csv("dat/NYPD_Complaint_Data_Historic_20241023.csv")}
 
 historic %>%
   filter(OFNS_DESC %in% c("MURDER & NON-NEGL. MANSLAUGHTER",
