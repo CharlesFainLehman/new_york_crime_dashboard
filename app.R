@@ -121,8 +121,11 @@ server <- function(input, output) {
   output$mtm <- renderPlotly({
     visualized_data() %>%
       group_by(Year, Month) %>%
+      #grab the last row of each month, which is the final value for that month
       slice_tail(n = 1) %>%
       ungroup() %>%
+      #drop the last entry, because the most recent month is often incomplete
+      slice_head(n = nrow(.) - 1) %>%
       plot_ly(x = ~Date, y = ~monthly_n, line = list(color = "#2fa8ff")) %>%
       add_lines() %>%
       MI_style_plotly()
