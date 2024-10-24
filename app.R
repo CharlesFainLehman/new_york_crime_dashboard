@@ -51,7 +51,7 @@ ui <- page_navbar(
   nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm")),
   nav_panel("12-Month Rolling Sum", plotlyOutput("rs")),
   nav_item(a(href = "https://github.com/CharlesFainLehman/new_york_crime_dashboard/blob/main/dat/weekly_crime_counts_post_processed.csv", "Get the Data", target = "_blank"), ""),
-
+  
   sidebar = sidebar(
     selectInput(inputId = "offense", 
                 label = tooltip(
@@ -86,7 +86,7 @@ ui <- page_navbar(
               
               p("Users can select one of nine crimes, and view offense counts last week, year-to-date, and on a rolling basis."),
               
-              p("This dashboard is a product of the Manhattan Institute for Policy Research.")
+              p("Murder counts prior to Q3 2024 may be slightly inaccurate due to data source issues."),
     ),
     img(src="Master-MI-Black-RGB.png")
   )
