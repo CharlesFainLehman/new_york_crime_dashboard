@@ -1,3 +1,6 @@
+print("Scraping compstat report...")
 source("bin/Scrape_Compstat_Report.R")
+print("Appending new compstat report...")
 source("bin/Append Compstat Reports to Database.R")
+print("Postprocessing data...")
 source("bin/Postprocess Weekly Crime Counts.R")
