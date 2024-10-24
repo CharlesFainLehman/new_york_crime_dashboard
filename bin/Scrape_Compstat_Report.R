@@ -33,6 +33,8 @@ date <- as.Date(paste(date[3], date[1], date[2], sep = "-"), format = "%Y-%m-%d"
 crimes$Year <- year(date)
 crimes$Week <- week(date)
 
+if(!dir.exists("dat/individual reports/csv/")) {dir.create("dat/individual reports/csv/")}
+
 write.csv(crimes, paste("dat/individual reports/csv/compstat-", year(date), "-", week(date), ".csv", sep = ""), row.names = F)
 
 file.rename("dat/compstat.pdf", paste('dat/individual reports/pdf/compstat-', year(date), "-", week(date), ".pdf", sep = ""))
