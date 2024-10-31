@@ -45,10 +45,10 @@ ui <- page_navbar(
   theme = MI_theme,
   title = "Crime in New York",
   
-  nav_panel(paste("Last Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week", height = 400, width = 750)),
-  nav_panel("Year to Date", plotlyOutput("ytd", height = 400, width = 650)),
-  nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm", height = 400, width = 650)),
-  nav_panel("12-Month Rolling Sum", plotlyOutput("rs", height = 400, width = 650)),
+  nav_panel(paste("Last Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week", height = 250, width = 650)),
+  nav_panel("Year to Date", plotlyOutput("ytd", height = 250, width = 650)),
+  nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm", height = 250, width = 650)),
+  nav_panel("12-Month Rolling Sum", plotlyOutput("rs", height = 250, width = 650)),
   nav_item(a(href = "https://github.com/CharlesFainLehman/new_york_crime_dashboard/blob/main/dat/weekly_crime_counts_post_processed.csv", "Get the Data", target = "_blank"), ""),
   
   sidebar = sidebar(
