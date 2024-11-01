@@ -45,10 +45,10 @@ ui <- page_navbar(
   theme = MI_theme,
   title = "Crime in New York",
   
-  nav_panel(paste("Last Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week", height = 500, width = 750)),
-  nav_panel("Year to Date", plotlyOutput("ytd", height = 500, width = 650)),
-  nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm", height = 500, width = 650)),
-  nav_panel("12-Month Rolling Sum", plotlyOutput("rs", height = 500, width = 650)),
+  nav_panel(title = paste("Last Week (", strftime(most_recent_date, "%m/%d"), ")", sep = ""), plotlyOutput("week", height = 550, width = 700)),
+  nav_panel("Year to Date", plotlyOutput("ytd", height = 550, width = 700)),
+  nav_panel("Trend (Month-to-Month)", plotlyOutput("mtm", height = 550, width = 700)),
+  nav_panel("12-Month Rolling Sum", plotlyOutput("rs", height = 550, width = 700)),
   nav_item(a(href = "https://github.com/CharlesFainLehman/new_york_crime_dashboard/blob/main/dat/weekly_crime_counts_post_processed.csv", "Get the Data", target = "_blank"), ""),
   
   sidebar = sidebar(
@@ -105,7 +105,7 @@ server <- function(input, output) {
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
       plot_ly(x= ~Year, y= ~n, marker = list(color = "#2fa8ff"),
-              height = 500, width = 650) %>%
+              height = 550, width = 700) %>%
       add_bars(hovertemplate = "%{y}<extra></extra>") %>%
       MI_style_plotly()
   })
@@ -114,7 +114,7 @@ server <- function(input, output) {
     visualized_data() %>%
       filter(Week == most_recent_week) %>%
       plot_ly(x =~Year, y = ~ytd, marker = list(color = "#2fa8ff"),
-              height = 500, width = 650) %>%
+              height = 550, width = 700) %>%
       add_bars(hovertemplate = "%{y}<extra></extra>") %>%
       MI_style_plotly()
   })
@@ -128,7 +128,7 @@ server <- function(input, output) {
       #drop the last entry, because the most recent month is often incomplete
       slice_head(n = nrow(.) - 1) %>%
       plot_ly(x = ~Date, y = ~monthly_n, line = list(color = "#2fa8ff"),
-              height = 500, width = 650) %>%
+              height = 550, width = 700) %>%
       add_lines() %>%
       MI_style_plotly()
   })
@@ -138,7 +138,7 @@ server <- function(input, output) {
     visualized_data() %>% 
       filter(!is.na(rollingavg)) %>%
       plot_ly(x = ~Date, y = ~rollingavg, line = list(color = "#2fa8ff"),
-              height = 500, width = 650) %>%
+              height = 550, width = 700) %>%
       add_lines() %>%
       MI_style_plotly()
   })
