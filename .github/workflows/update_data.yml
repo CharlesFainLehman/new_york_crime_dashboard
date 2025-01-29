@@ -20,6 +20,8 @@ jobs:
       run: sudo apt-get install libpoppler-cpp-dev
     - name: Install qpdf
       run: sudo apt-get install qpdf
+    - name: Install jpeglib
+      run: sudo apt-get install libjpeg-turbo-devel
     - name: Install R libraries
       run: |
         install.packages(c("pdftools", "stringr", "lubridate", "dplyr", "zoo", "qpdf"))
