@@ -1,9 +1,9 @@
 name: update_data
-#on: [push]
+on: [push]
 
-on:
-  schedule:
-    - cron: "25 4 * * *" 
+#on:
+#  schedule:
+#    - cron: "25 4 * * *" 
 
 jobs:
   build:
@@ -18,9 +18,11 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: Install poppler
       run: sudo apt-get install libpoppler-cpp-dev
+    - name: Install qpdf
+      run: sudo apt-get install qpdf
     - name: Install R libraries
       run: |
-        install.packages(c("pdftools", "stringr", "lubridate", "dplyr", "zoo"))
+        install.packages(c("pdftools", "stringr", "lubridate", "dplyr", "zoo", "qpdf"))
       shell: Rscript {0}
     - name: Run script
       run: Rscript bin/Data_Production_Process.R
