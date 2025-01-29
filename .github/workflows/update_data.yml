@@ -21,7 +21,7 @@ jobs:
     - name: Install qpdf
       run: sudo apt-get install qpdf
     - name: Install jpeglib
-      run: sudo apt-get install libjpeg-turbo-devel
+      run: sudo apt-get install libjpeg-dev
     - name: Install R libraries
       run: |
         install.packages(c("pdftools", "stringr", "lubridate", "dplyr", "zoo", "qpdf"))
