@@ -8,6 +8,9 @@ shinyOptions(bslib = T)
 #load the bs theme
 source("bin/MI_theme.R")
 
+#to avoid hardcoding the year...
+current_year = as.numeric(format(Sys.Date(), "%Y"))
+
 MI_style_plotly <- function(plot) {
   plot %>%
     layout(plot_bgcolor = 'rgba(0, 0, 0, 0)',
@@ -76,8 +79,8 @@ ui <- page_navbar(
                   placement = 'top'
                 ),
                 min = 2006,
-                max = 2024,
-                value = c(2018, 2024),
+                max = current_year,
+                value = c(2018, current_year),
                 sep = ""),
     tags$text(p(tags$b("About:")),
               
