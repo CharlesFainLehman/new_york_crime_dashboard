@@ -21,7 +21,7 @@ MI_style_plotly <- function(plot) {
            hovermode = "closest",  # Ensure the hovermode is set properly
            hoverlabel = list(font = list(family = "Le Monde Livre", color = 'black'),
                              bordercolor = 'rgba(255,255,255,0.75)',
-                             bgcolor = 'rgbargba(255,255,255,0.75)')
+                             bgcolor = 'rgba(255,255,255,0.75)')
     ) %>% 
     config(displayModeBar = FALSE) %>%
     return()
@@ -33,10 +33,6 @@ weekly_crime_counts <- read.csv("dat/weekly_crime_counts_post_processed.csv") %>
 most_recent_week <- weekly_crime_counts %>%
   arrange(Year, Week) %>%
   slice_tail(n = 1) %>% pull(Week)
-
-most_recent_year <- weekly_crime_counts %>%
-  arrange(Year, Week) %>%
-  slice_tail(n = 1) %>% pull(Year)
 
 most_recent_date = weekly_crime_counts %>%
   arrange(Date) %>%

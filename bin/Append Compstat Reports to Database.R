@@ -8,7 +8,7 @@ compstat_reports <- list.files("dat/individual reports/csv", full.names = T)
 for(file in compstat_reports) {
   print(file)
   year = as.numeric(str_extract(file, "\\d\\d\\d\\d"))
-  week = as.numeric(str_extract(file, "\\d\\d(?=\\.)"))
+  week = as.numeric(str_extract(file, "\\d+(?=\\.)"))
   
   #if the combination of year and week is already in the data set
   if(nrow(filter(weekly_summary, Year == year, Week == week)) > 0) {

@@ -4,7 +4,7 @@ library(lubridate)
 
 print("Downloading compstat report...")
 download.file("https://www.nyc.gov/assets/nypd/downloads/pdf/crime_statistics/cs-en-us-city.pdf",
-              "dat/compstat.pdf", mode = 'w+')
+              "dat/compstat.pdf", mode = 'wb')
 
 compstat_raw <- pdf_text("dat/compstat.pdf")
 compstat_rows <- unlist(strsplit(compstat_raw, "\n"))
@@ -13,7 +13,11 @@ compstat_dates <- unlist(str_extract_all(compstat_raw, "\\d{1,2}/\\d{1,2}/\\d{4}
 
 #extracting the rows for the crimes we're interested in
 
-crimes <- compstat_rows[str_detect(compstat_rows, "Murder|Rape|Robbery|Fel. Assault|Burglary|Gr. Larceny|G.L.A.|Petit Larceny|Misd. Assault")][1:9]
+crimes <- compstat_rows[str_detect(compstat_rows, "Murder|Rape|Robbery|Fel\\. Assault|Burglary|Gr\\. Larceny|G\\.L\\.A\\.|Petit Larceny|Misd\\. Assault")]
+
+if(length(crimes) < 9) stop(paste("Expected 9 crime rows in PDF, got", length(crimes), "— PDF format may have changed"))
+
+crimes <- crimes[1:9]
 
 #splitting on white space unless the white space is preceded by a period
 #which avoids splitting "Fel. Assault" and "Gr. Larceny" on white space
@@ -37,8 +41,13 @@ crimes$Week <- week(date)
 
 if(!dir.exists("dat/individual reports/csv/")) {
   print("Creating csv directory...")
-  dir.create("dat/individual reports/csv/")
-  }
+  dir.create("dat/individual reports/csv/", recursive = T)
+}
+
+if(!dir.exists("dat/individual reports/pdf/")) {
+  print("Creating pdf directory...")
+  dir.create("dat/individual reports/pdf/", recursive = T)
+}
 
 print("Saving csv...")
 write.csv(crimes, paste("dat/individual reports/csv/compstat-", year(date), "-", week(date), ".csv", sep = ""), row.names = F)
