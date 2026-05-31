@@ -4,7 +4,8 @@ library(lubridate)
 
 print("Downloading compstat report...")
 download.file("https://www.nyc.gov/assets/nypd/downloads/pdf/crime_statistics/cs-en-us-city.pdf",
-              "dat/compstat.pdf", mode = 'wb')
+              "dat/compstat.pdf", mode = 'wb',
+              headers = c("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"))
 
 compstat_raw <- pdf_text("dat/compstat.pdf")
 compstat_rows <- unlist(strsplit(compstat_raw, "\n"))
