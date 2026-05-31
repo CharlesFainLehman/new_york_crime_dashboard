@@ -1,10 +1,13 @@
 library(rsconnect)
 
-# The workflow installs packages from Posit's binary RSPM repo for speed, which
-# leaves "RSPM" as their recorded source. shinyapps.io's build server can't fetch
-# source tarballs from that, so pin a plain CRAN source repo for the manifest.
+# The workflow installs packages from Posit's binary RSPM repo for speed, so
+# their DESCRIPTION records Repository: RSPM. rsconnect maps that name against
+# getOption("repos") to build the manifest, so "RSPM" must resolve to a real
+# URL that serves source tarballs (PPM "latest" does); otherwise shinyapps.io's
+# build server gets the bare name "RSPM" as a URL and can't fetch sources.
 Sys.unsetenv("RENV_CONFIG_REPOS_OVERRIDE")
-options(repos = c(CRAN = "https://cloud.r-project.org"))
+options(repos = c(RSPM = "https://packagemanager.posit.co/cran/latest",
+                  CRAN = "https://cloud.r-project.org"))
 
 rsconnect::setAccountInfo(name='manhattan-institute', token='D7E98B14F95BD4122499A048795045DF', secret=commandArgs(trailingOnly=TRUE)[1])
 rsconnect::deployApp(
