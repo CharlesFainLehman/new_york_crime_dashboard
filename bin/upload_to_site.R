@@ -1,5 +1,7 @@
 library(rsconnect)
-rsconnect::setAccountInfo(name='manhattan-institute', token='D7E98B14F95BD4122499A048795045DF', secret=commandArgs(trailingOnly=TRUE)[1])
+rsconnect::setAccountInfo(name='manhattan-institute',
+                          token=Sys.getenv("SHINYAPPS_TOKEN"),
+                          secret=Sys.getenv("SHINYAPPS_SECRET_TOKEN"))
 rsconnect::deployApp(
   appFiles = c("app.R",
                "bin/MI_theme.R",

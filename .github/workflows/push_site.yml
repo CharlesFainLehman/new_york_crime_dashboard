@@ -7,8 +7,9 @@ on:
     workflows: ["update_data"]
     types:
       - completed
-env: 
-    SECRET: ${{ secrets.SHINYAPPS_SECRET_TOKEN }}
+env:
+    SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+    SHINYAPPS_SECRET_TOKEN: ${{ secrets.SHINYAPPS_SECRET_TOKEN }}
 
 jobs:
   build:
@@ -26,4 +27,4 @@ jobs:
         install.packages(c("rsconnect", "shiny", "dplyr", "bslib", "plotly", "bsicons"))
       shell: Rscript {0}
     - name: Push to site
-      run: Rscript bin/upload_to_site.R "$SECRET"
+      run: Rscript bin/upload_to_site.R
