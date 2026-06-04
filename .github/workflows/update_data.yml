@@ -28,12 +28,12 @@ jobs:
       shell: Rscript {0}
     - name: Run script
       run: Rscript bin/Data_Production_Process.R
-    - name: adding new file #this will fail if there's no changes, which is fine, I can clean it up later
+    - name: adding new file
       run: |
         git config --local user.name  ${{ github.actor }}
         git config --local user.email "clehman@manhattan.institute"
         git add -A
-        git commit -m "daily update"
+        git diff --staged --quiet || git commit -m "daily update"
     - name: Push changes  # push the output folder to your repo
       uses: ad-m/github-push-action@master
       with:
